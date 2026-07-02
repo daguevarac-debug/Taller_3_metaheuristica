@@ -50,7 +50,7 @@ $$
 
 Con esta transformación, cada objetivo queda expresado entre 0 y 1. La normalización evita que la ganancia y el tiempo tengan una influencia desigual debido a sus diferentes escalas numéricas.
 
-La implementación se encuentra en `analisis.py`, dentro de la función `normalizar_objetivos()`. Esta función se empleará para calcular el indicador spacing y para aplicar las técnicas de decisión multicriterio.
+Para el indicador spacing se emplea la función `normalizar_objetivos()` de `analisis.py`. En las técnicas multicriterio se usa una normalización min-max orientada, de modo que un valor alto represente mejor desempeño: la ganancia se trata como criterio de beneficio y el tiempo como criterio de costo.
 
 ### 7.5. Parámetros utilizados y procedencia de los códigos
 
@@ -74,7 +74,7 @@ $$
 
 El peso de 0,50 para la ganancia y de 0,50 para el tiempo representa una preferencia equilibrada entre aumentar la rentabilidad y reducir el tiempo de producción. Esta decisión se adoptó porque el enunciado no establece que uno de los objetivos tenga mayor importancia que el otro.
 
-Los mismos pesos se aplicarán en TOPSIS y en la suma ponderada normalizada, lo que permitirá comparar las técnicas bajo condiciones equivalentes.
+Los mismos pesos se aplicaron en TOPSIS y en la suma ponderada normalizada, lo que permitió comparar las técnicas bajo condiciones equivalentes.
 
 ## 8. Indicadores de calidad del frente de Pareto
 
@@ -90,3 +90,62 @@ El indicador spacing mide la uniformidad con la que las soluciones se distribuye
 NSGA-II presentó el mejor desempeño bajo los dos indicadores exigidos. Alcanzó un 100 % promedio de soluciones no dominadas en las cinco corridas, mientras que MOPSO obtuvo un promedio de 91,333333 %. Además, NSGA-II registró un spacing promedio menor, lo que evidencia una distribución más uniforme del frente.
 
 La variabilidad también fue menor en NSGA-II, puesto que la desviación del porcentaje fue igual a cero y la desviación del spacing fue inferior a la obtenida por MOPSO. Aunque MOPSO alcanzó un spacing menor en la corrida con semilla 30, su comportamiento fue menos estable en el conjunto de las cinco ejecuciones. Como resultado complementario, NSGA-II también presentó un menor tiempo promedio de ejecución, con 3,102449 s frente a 5,836887 s de MOPSO. Por tanto, NSGA-II produjo el mejor frente de Pareto según los indicadores analizados.
+
+## 9. Toma de decisión
+
+Los frentes consolidados de NSGA-II y MOPSO se combinaron en una sola matriz. De 344 soluciones iniciales se obtuvieron 336 alternativas diferentes; después de retirar 62 alternativas dominadas y agrupar soluciones con los mismos valores objetivo, la matriz final quedó compuesta por 272 pares únicos de ganancia y tiempo. Esta depuración evitó aplicar las técnicas multicriterio sobre soluciones que ya eran inferiores a otras.
+
+### 9.1. TOPSIS
+
+TOPSIS selecciona la alternativa más próxima a una solución ideal positiva y más alejada de una solución ideal negativa. La ganancia se normalizó como criterio de beneficio y el tiempo como criterio de costo:
+
+$$
+r_{iG}=\frac{G_i-G_{\min}}{G_{\max}-G_{\min}}
+$$
+
+$$
+r_{iT}=\frac{T_{\max}-T_i}{T_{\max}-T_{\min}}
+$$
+
+Después se aplicaron los pesos \(w_G=w_T=0.50\), se calcularon las distancias euclidianas al ideal positivo y al ideal negativo, y se obtuvo el coeficiente de cercanía:
+
+$$
+C_i=\frac{D_i^-}{D_i^+ + D_i^-}
+$$
+
+La alternativa con mayor \(C_i\) fue seleccionada por TOPSIS.
+
+### 9.2. Suma ponderada normalizada
+
+La suma ponderada normalizada asigna a cada alternativa un puntaje agregado a partir de los criterios normalizados. Para este problema se calculó:
+
+$$
+S_i=0.50r_{iG}+0.50r_{iT}
+$$
+
+La alternativa con mayor \(S_i\) fue seleccionada como el mejor compromiso según esta técnica.
+
+### 9.3. Resultados
+
+| Técnica | \(x_1\) | \(x_2\) | \(x_3\) | Ganancia | Tiempo | Método de origen | Puntaje |
+|---|---:|---:|---:|---:|---:|---|---:|
+| TOPSIS | 0 | 48 | 0 | 3120 | 57,6 | MOPSO | 0,508885 |
+| Suma ponderada normalizada | 0 | 30 | 0 | 1950 | 36,0 | MOPSO | 0,510255 |
+
+TOPSIS seleccionó una alternativa intermedia, con mayor ganancia y mayor tiempo que la solución elegida por suma ponderada. La suma ponderada favoreció una alternativa más conservadora, cercana al mínimo de producción y con menor tiempo total. La diferencia se debe a que TOPSIS evalúa simultáneamente la proximidad al ideal positivo y el alejamiento del ideal negativo, mientras que la suma ponderada agrega directamente los dos desempeños normalizados.
+
+### 9.4. Solución final recomendada
+
+Se recomienda la solución seleccionada mediante TOPSIS:
+
+$$
+\mathbf{x}=[0,48,0]
+$$
+
+Esta alternativa propone producir 48 escritorios estándar, con una ganancia total de 3120 y un tiempo de producción de 57,6 horas. La elección se considera más equilibrada, puesto que evita concentrarse excesivamente en el menor tiempo y conserva una ganancia superior a la obtenida mediante suma ponderada.
+
+### 9.5. Referencias para las técnicas multicriterio
+
+[1] X. Liu, H. Guo, H. Chen, Y. Wu y D. Yu, “An Improved NSGA-II–TOPSIS Integrated Framework for Multi-Objective Optimization of Electric Vehicle Charging Station Siting,” *Sustainability*, vol. 18, art. 668, 2026, doi: 10.3390/su18020668.
+
+[2] A. Ruiz-Vélez, J. García, J. Alcalá y V. Yepes, “Sustainable Road Infrastructure Decision-Making: Custom NSGA-II with Repair Operators for Multi-Objective Optimization,” *Mathematics*, vol. 12, no. 5, art. 730, 2024, doi: 10.3390/math12050730.
