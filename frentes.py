@@ -38,6 +38,53 @@ def construir_tabla_frente(
     )
 
 
+def consolidar_frente_desde_soluciones(
+    soluciones: list[np.ndarray] | np.ndarray,
+) -> pd.DataFrame:
+    """Consolida candidatos y devuelve su frente no dominado."""
+    if isinstance(soluciones, list):
+        soluciones_candidatas = np.vstack(soluciones)
+    else:
+        soluciones_candidatas = np.asarray(
+            soluciones,
+            dtype=int,
+        )
+
+    frente, objetivos = extraer_frente_no_dominado(
+        soluciones_candidatas,
+        eliminar_duplicados=True,
+    )
+
+    return construir_tabla_frente(
+        frente,
+        objetivos,
+    )
+
+
+def consolidar_frentes_desde_corridas(
+    resultados_corridas: list[dict],
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Consolida frentes de NSGA-II y repositorios de MOPSO ya calculados."""
+    candidatos_nsga2 = [
+        corrida["frente_nsga2"]
+        for corrida in resultados_corridas
+    ]
+
+    candidatos_mopso = [
+        corrida["repositorio_mopso"]
+        for corrida in resultados_corridas
+    ]
+
+    return (
+        consolidar_frente_desde_soluciones(
+            candidatos_nsga2
+        ),
+        consolidar_frente_desde_soluciones(
+            candidatos_mopso
+        ),
+    )
+
+
 def generar_frentes_consolidados() -> tuple[
     pd.DataFrame,
     pd.DataFrame,

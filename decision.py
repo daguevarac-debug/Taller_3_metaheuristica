@@ -108,6 +108,53 @@ def construir_matriz_decision(
         "MOPSO",
     )
 
+    return construir_matriz_decision_desde_dataframes(
+        frente_nsga2,
+        frente_mopso,
+    )
+
+
+def construir_matriz_decision_desde_dataframes(
+    frente_nsga2: pd.DataFrame,
+    frente_mopso: pd.DataFrame,
+) -> tuple[pd.DataFrame, dict[str, int]]:
+    """
+    Combina frentes ya calculados y conserva alternativas no dominadas.
+
+    Esta entrada evita depender de CSV cuando el flujo se ejecuta en
+    memoria desde el notebook.
+    """
+    frente_nsga2 = frente_nsga2[
+        COLUMNAS_ALTERNATIVA
+    ].copy()
+
+    frente_mopso = frente_mopso[
+        COLUMNAS_ALTERNATIVA
+    ].copy()
+
+    frente_nsga2[["x1", "x2", "x3"]] = (
+        frente_nsga2[["x1", "x2", "x3"]]
+        .astype(int)
+    )
+
+    frente_mopso[["x1", "x2", "x3"]] = (
+        frente_mopso[["x1", "x2", "x3"]]
+        .astype(int)
+    )
+
+    frente_nsga2[["ganancia", "tiempo"]] = (
+        frente_nsga2[["ganancia", "tiempo"]]
+        .astype(float)
+    )
+
+    frente_mopso[["ganancia", "tiempo"]] = (
+        frente_mopso[["ganancia", "tiempo"]]
+        .astype(float)
+    )
+
+    frente_nsga2["metodo"] = "NSGA-II"
+    frente_mopso["metodo"] = "MOPSO"
+
     tabla_completa = pd.concat(
         [
             frente_nsga2,

@@ -57,6 +57,7 @@ def guardar_grafica_frente(
     tabla: pd.DataFrame,
     titulo: str,
     ruta_salida: Path,
+    unir_puntos: bool = False,
 ) -> None:
     """Guarda una gráfica de dispersión ganancia vs tiempo."""
     tabla_ordenada = tabla.sort_values(
@@ -69,10 +70,11 @@ def guardar_grafica_frente(
         tabla_ordenada["tiempo"],
         tabla_ordenada["ganancia"],
     )
-    plt.plot(
-        tabla_ordenada["tiempo"],
-        tabla_ordenada["ganancia"],
-    )
+    if unir_puntos:
+        plt.plot(
+            tabla_ordenada["tiempo"],
+            tabla_ordenada["ganancia"],
+        )
 
     plt.title(titulo)
     plt.xlabel("Tiempo total de producción [h]")
