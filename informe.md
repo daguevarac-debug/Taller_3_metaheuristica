@@ -107,13 +107,13 @@ $$
 r_{iT}=\frac{T_{\max}-T_i}{T_{\max}-T_{\min}}
 $$
 
-Después se aplicaron los pesos \(w_G=w_T=0.50\), se calcularon las distancias euclidianas al ideal positivo y al ideal negativo, y se obtuvo el coeficiente de cercanía:
+Después se aplicaron los pesos $\(w_G=w_T=0.50\)$, se calcularon las distancias euclidianas al ideal positivo y al ideal negativo, y se obtuvo el coeficiente de cercanía:
 
 $$
 C_i=\frac{D_i^-}{D_i^+ + D_i^-}
 $$
 
-La alternativa con mayor \(C_i\) fue seleccionada por TOPSIS.
+La alternativa con mayor $\(C_i\)$ fue seleccionada por TOPSIS.
 
 ### 9.2. Suma ponderada normalizada
 
@@ -123,11 +123,11 @@ $$
 S_i=0.50r_{iG}+0.50r_{iT}
 $$
 
-La alternativa con mayor \(S_i\) fue seleccionada como el mejor compromiso según esta técnica.
+La alternativa con mayor $\(S_i\)$ fue seleccionada como el mejor compromiso según esta técnica.
 
 ### 9.3. Resultados
 
-| Técnica | \(x_1\) | \(x_2\) | \(x_3\) | Ganancia | Tiempo | Método de origen | Puntaje |
+| Técnica | $\(x_1\)$ | $\(x_2\)$ | $\(x_3\)$ | Ganancia | Tiempo | Método de origen | Puntaje |
 |---|---:|---:|---:|---:|---:|---|---:|
 | TOPSIS | 0 | 48 | 0 | 3120 | 57,6 | MOPSO | 0,508885 |
 | Suma ponderada normalizada | 0 | 30 | 0 | 1950 | 36,0 | MOPSO | 0,510255 |
