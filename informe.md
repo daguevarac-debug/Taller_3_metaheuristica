@@ -75,3 +75,18 @@ $$
 El peso de 0,50 para la ganancia y de 0,50 para el tiempo representa una preferencia equilibrada entre aumentar la rentabilidad y reducir el tiempo de producción. Esta decisión se adoptó porque el enunciado no establece que uno de los objetivos tenga mayor importancia que el otro.
 
 Los mismos pesos se aplicarán en TOPSIS y en la suma ponderada normalizada, lo que permitirá comparar las técnicas bajo condiciones equivalentes.
+
+## 8. Indicadores de calidad del frente de Pareto
+
+El porcentaje de soluciones no dominadas corresponde a la proporción de soluciones finales que pertenecen al frente de Pareto. Un valor alto indica que el algoritmo conserva una mayor cantidad de alternativas eficientes dentro de su población final.
+
+El indicador spacing mide la uniformidad con la que las soluciones se distribuyen sobre el frente. Para calcularlo se normalizan los objetivos, se determina para cada solución la distancia mínima respecto a las demás y se evalúa la dispersión de esas distancias. En consecuencia, un valor bajo indica una distribución más uniforme.
+
+| Método | Porcentaje promedio de soluciones no dominadas (%) | Desviación del porcentaje | Spacing promedio | Desviación del spacing |
+|---|---:|---:|---:|---:|
+| NSGA-II | 100,000000 | 0,000000 | 0,024998 | 0,002935 |
+| MOPSO | 91,333333 | 6,497863 | 0,044829 | 0,013013 |
+
+NSGA-II presentó el mejor desempeño bajo los dos indicadores exigidos. Alcanzó un 100 % promedio de soluciones no dominadas en las cinco corridas, mientras que MOPSO obtuvo un promedio de 91,333333 %. Además, NSGA-II registró un spacing promedio menor, lo que evidencia una distribución más uniforme del frente.
+
+La variabilidad también fue menor en NSGA-II, puesto que la desviación del porcentaje fue igual a cero y la desviación del spacing fue inferior a la obtenida por MOPSO. Aunque MOPSO alcanzó un spacing menor en la corrida con semilla 30, su comportamiento fue menos estable en el conjunto de las cinco ejecuciones. Como resultado complementario, NSGA-II también presentó un menor tiempo promedio de ejecución, con 3,102449 s frente a 5,836887 s de MOPSO. Por tanto, NSGA-II produjo el mejor frente de Pareto según los indicadores analizados.
